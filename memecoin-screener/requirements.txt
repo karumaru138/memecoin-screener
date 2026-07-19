@@ -1,0 +1,10 @@
+websockets>=12.0        # PumpPortal stream
+httpx>=0.27             # async HTTP for all REST APIs
+aiosqlite>=0.20         # async SQLite
+pydantic>=2.7           # config + API response validation
+pyyaml>=6.0             # config file
+tenacity>=8.3           # retries with exponential backoff
+
+# dev / test
+pytest>=8.2
+pytest-asyncio>=0.23

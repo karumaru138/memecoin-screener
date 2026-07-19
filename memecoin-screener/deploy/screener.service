@@ -1,0 +1,32 @@
+# systemd unit — the plain-VPS alternative to Docker.
+#
+# 1. Put the project at /opt/memecoin-screener
+# 2. python -m venv .venv && .venv/bin/pip install -r requirements.txt
+# 3. Fill in .env
+# 4. sudo cp deploy/screener.service /etc/systemd/system/
+# 5. sudo systemctl daemon-reload && sudo systemctl enable --now screener
+# 6. journalctl -u screener -f        # watch it live
+
+[Unit]
+Description=Solana Memecoin Screener
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=screener
+WorkingDirectory=/opt/memecoin-screener
+ExecStart=/opt/memecoin-screener/.venv/bin/python main.py
+Restart=always
+RestartSec=5
+# don't spam-restart on a crash loop
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# light hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

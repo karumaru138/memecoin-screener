@@ -1,0 +1,18 @@
+services:
+  screener:
+    build: .
+    container_name: memecoin-screener
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # config is read at startup; edit it and restart to retune
+      - ./config.yaml:/app/config.yaml:ro
+      # persist SQLite + logs across restarts
+      - ./data:/app/data
+    # keep DB/logs on the volume
+    environment:
+      - TZ=UTC
+    # main.py reads config.yaml; point db/log at the mounted volume there:
+    #   runtime.db_path: /app/data/screener.db
+    #   runtime.log_path: /app/data/logs/screener.jsonl

@@ -1,0 +1,98 @@
+# ═══════════════════════════════════════════════════════════════════
+#  Solana Memecoin Screener — all thresholds & weights live here.
+#  NEVER hardcode these in the code. This file is where you tune.
+# ═══════════════════════════════════════════════════════════════════
+
+hard_filters:
+  require_mint_revoked: true          # dev must NOT be able to mint more supply
+  require_freeze_revoked: true        # dev must NOT be able to freeze your tokens
+  require_lp_secured: true            # LP burned or locked >= lp_min_lock_days
+  lp_min_lock_days: 30
+  max_top10_pct: 25                   # reject if top-10 non-LP wallets hold > this %
+  min_liquidity_usd: 20000            # below this you can't reliably exit
+  min_age_minutes: 30                 # sub-30-min tokens are lottery tickets
+  max_age_hours: 48                   # older than this without traction = dead
+  # RugCheck: reject outright above this aggregate risk score (0 = safest).
+  # Set null to never hard-reject on RugCheck alone (still used in scoring).
+  rugcheck_hard_reject_score: 40000
+
+scoring:
+  weights:
+    security: 0.35
+    traction: 0.40
+    social: 0.15
+    momentum: 0.10
+  alert_threshold: 70                 # alert only at/above this score
+  realert_on_score_change: 15         # follow-up alert if score moves this much
+  # security penalties (points subtracted from a base of 100)
+  security:
+    dev_pct_soft: 3.0                 # penalty starts above this dev-hold %
+    dev_pct_hard: 5.0                 # heavy penalty above this
+    dev_penalty_soft: 15
+    dev_penalty_hard: 30
+    top10_penalty_per_pct_over: 1.0   # penalty per % of top10 over half the cap
+    metadata_mutable_penalty: 5
+    bundled_sniper_penalty: 15
+    rugcheck_max_penalty: 30          # scaled by rugcheck score
+  # traction bands (points awarded)
+  traction:
+    liquidity_bands:                  # [min_usd, points]
+      - [20000, 10]
+      - [50000, 20]
+      - [150000, 25]
+    mcap_sweet_low: 50000             # ideal early mcap window
+    mcap_sweet_high: 1000000
+    mcap_points: 25
+    volliq_organic_low: 1.0           # vol:liq ratio considered organic
+    volliq_organic_high: 10.0
+    volliq_points: 20
+    volliq_wash_ratio: 20.0           # above this looks like wash trading -> 0
+    buys_sells_min: 1.2               # buy pressure threshold
+    buys_sells_points: 15
+    holder_growth_points: 20          # scaled by holder growth rate
+  # social points
+  social:
+    live_socials_points: 30           # X / Telegram / website present
+    paid_profile_points: 25           # DexScreener paid Enhanced Token Info / boost
+    active_meta_points: 25            # rides an active trending meta
+    smart_wallet_points: 20           # reserved for Phase 3 (smart-wallet buys)
+  # momentum
+  momentum:
+    price_1h_points: 50               # scaled by 1h price change, capped
+    holder_accel_points: 50           # scaled by holder acceleration, capped
+    vertical_cap: 80                  # a purely vertical pump can't exceed this
+
+pacing:
+  fast_check_minutes: 5               # WATCHING < 2h and all CANDIDATEs
+  slow_check_minutes: 15              # WATCHING 2h–24h
+  hourly_check_minutes: 60            # WATCHING 24h–48h
+  new_min_age_minutes: 30             # promote NEW -> WATCHING at this age
+  candidate_recheck_hours: 6          # re-check concentration-rejected once after this
+  expire_hours: 48
+  dexscreener_budget_rpm: 45          # keep headroom under the 60/min cap
+  helius_rps: 8                       # stay under free 10 req/s
+
+delivery:
+  telegram:
+    enabled: true
+  discord:
+    enabled: true
+  max_alerts_per_hour: 6              # hard cap; alert fatigue kills the tool
+  links:
+    dexscreener: "https://dexscreener.com/solana/{mint}"
+    rugcheck: "https://rugcheck.xyz/tokens/{mint}"
+    solscan: "https://solscan.io/token/{mint}"
+
+outcome:
+  # snapshot price at these offsets after each alert, for model tuning
+  checkpoints_hours: [1, 6, 24]
+
+monitoring:
+  heartbeat_silent_minutes: 15        # warn if no ingest event for this long
+  daily_summary_hour_local: 9         # send daily digest at this local hour
+
+runtime:
+  db_path: "screener.db"
+  log_path: "logs/screener.jsonl"
+  # If true, do everything EXCEPT actually send alerts (dry run for testing).
+  alert_dry_run: false
