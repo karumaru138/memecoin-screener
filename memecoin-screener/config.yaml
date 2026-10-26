@@ -7,10 +7,10 @@ hard_filters:
   require_mint_revoked: true          # dev must NOT be able to mint more supply
   require_freeze_revoked: true        # dev must NOT be able to freeze your tokens
   require_lp_secured: true            # LP burned or locked >= lp_min_lock_days
-  lp_min_lock_days: 30
+  lp_min_lock_days: 5
   max_top10_pct: 25                   # reject if top-10 non-LP wallets hold > this %
   min_liquidity_usd: 20000            # below this you can't reliably exit
-  min_age_minutes: 30                 # sub-30-min tokens are lottery tickets
+  min_age_minutes: 5                 # sub-30-min tokens are lottery tickets
   max_age_hours: 48                   # older than this without traction = dead
   # RugCheck: reject outright above this aggregate risk score (0 = safest).
   # Set null to never hard-reject on RugCheck alone (still used in scoring).

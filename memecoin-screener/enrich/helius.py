@@ -41,6 +41,12 @@ BURN_ADDRESSES = {
 class _Retryable(Exception):
     pass
 
+class RpcClientError(Exception):
+    def __init__(self, code: int , message: str):
+        self.code = code
+        super().__init__(f"[{code}] {message}")
+
+_PERMANENT_RPC_CODES = {-32600, -32601, -32602}
 
 class HeliusMintInfo:
     def __init__(self, mint_authority: Optional[str], freeze_authority: Optional[str],
