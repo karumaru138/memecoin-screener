@@ -1,4 +1,5 @@
 # Solana Memecoin Screener
+# NOT A FINANCIAL ADVISOR!!!
 
 A bot that watches new and trending Solana memecoins around the clock, filters
 them through the parameters that predict survival vs. rug, scores the
