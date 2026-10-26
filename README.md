@@ -1,11 +1,11 @@
 # Solana Memecoin Screener
 # NOT A FINANCIAL ADVISOR!!!
 
-A bot that watches new and trending Solana memecoins around the clock, filters
+Little bot I made to track new and trending Solana memecoins around the clock, filters
 them through the parameters that predict survival vs. rug, scores the
-survivors, and pushes high-signal alerts to **Telegram** and **Discord**.
+survivors, and pushes high-signal alerts to **Telegram** and **Discord**. (I recommend Telegram from personal experience)
 
-**You make every trade decision. The bot never touches your money.** It is a
+**(IMPORTANT)YOU make every trade decision. The bot never touches your money.** It is a
 screener, not an auto-trader — it compresses ~10,000 daily launches into a
 handful of candidates worth a human look, then links you out to DexScreener /
 RugCheck / Solscan so *you* verify before deciding.
