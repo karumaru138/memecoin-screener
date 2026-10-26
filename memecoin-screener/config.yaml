@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════
 #  Solana Memecoin Screener — all thresholds & weights live here.
-#  NEVER hardcode these in the code. This file is where you tune.
+#  NEVER hardcode these in the code (personal recommendation ;)). This file is where you tune.
 # ═══════════════════════════════════════════════════════════════════
 
 hard_filters:
